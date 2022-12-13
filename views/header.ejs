@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Map</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .body{
+            background: url(https://images6.alphacoders.com/369/thumb-1920-369573.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+         
+        }
+        .title{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1%;
+            text-decoration:underline 3px rgb(23, 23, 23);
+        }
+        .input-area{
+           margin-top: 10%;
+           display: block;
+        }
+       label{
+        display: flex;
+        justify-content: center;
+        padding: 10px;   
+       }
+       h3{
+        margin:10px;
+       }    
+      #input-data{
+        margin: 10px;
+        width: 15%;
+        height:40px;
+       
+       }
+       a{
+        margin: 10px;
+        width:100px;
+        height:40px;
+        
+       }
+    .weather-data{
+        display: none;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .weather-data .wd{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(169, 168, 168);
+        color: white;
+    }
+    .weather-data .logo-name{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+       
+    }  
+    .weather-data .card-body{
+        padding:40px;
+        margin-top:1%;
+    } 
+    .weather-data img{
+        width: 6%;
+        
+    }
+    </style>
+
+</head>
+<body class="body">
+    
+    <h1 class="title"><%= title %></h1>
+    <div class="input-area">
+        <div class="card text-center">
+            <div class="card-header">
+              Live Weather
+            </div>
+            <div class="card-body ">
+              <h5 class="card-title">World Wearther Report</h5>
+              <p class="card-text">Uses Openweathermap API and provides live Weather report based on the city you provide.</p>
+           
+                <label><h3>City Name :</h3><input type="search" name="" placeholder="Enter your CityName" id="input-data">
+              <a href="#" class="btn btn-primary" id="click-btn">search</a></label>
+           
+              <div class="card-footer text-muted">
+                  <p>Designed by Arunsibi</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="weather-data"></div>
+
+    <!-- script tag -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+    <script>
+        const weather_data=document.querySelector(".weather-data");
+        const click_btn=document.querySelector("#click-btn");
+        const input_area=document.querySelector(".input-area");
+        const title = document.querySelector(".title");
+
+
+        click_btn.addEventListener("click",()=>{
+            const city = document.getElementById("input-data").value;
+            getweartherdata(city);
+
+            input_area.style.display="none";
+            title.style.display="none";
+            weather_data.style.display="flex";
+        })
+      
+
+        function getweartherdata(city){
+            
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=f3a419ab7ab02bcafdccf93381e74575`)
+            .then((res)=>res.json())
+            .then((get)=>{
+                console.log(get);
+                const div=document.createElement("div");
+                div.setAttribute("class","w-100 wd")
+                div.innerHTML=` <div class="w-100 wd ">
+            <div class="card-body container">
+              <h1 class="card-title">The Wearther is Currently haze</h1>
+              <p class="card-text">The Temperature in <b>${get.name}</b> is <b>${get.main.temp}</b> &#8451;</p>
+              <p class="card-text"> Weather Description is <b>${get.weather[0].description}</b></p>
+              <p class="card-text"> Humidity  is <b> ${get.main.humidity} </b></p>
+              <p class="card-text"> windspeed  is<b> ${get.wind.speed}</b></p>
+              <img src="https://www.shareicon.net/data/2016/04/25/755132_weather_512x512.png"alt="fog">  
+              <div class="logo-name">
+                <p>Designed by Arunsibi<p>
+              </div>
+            </div>
+            </div>`
+        
+              weather_data.appendChild(div);
+
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+        }
+    </script>
+  </body>
+</html>
